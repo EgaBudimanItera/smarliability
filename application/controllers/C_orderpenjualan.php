@@ -9,7 +9,10 @@ class C_orderpenjualan extends CI_Controller {
 	}
 
 	public function index(){
-		$query="SELECT * FROM orderpenjualan join pelanggan on opnjPlgnId=plgnId where opnjStatusOrder='order'";
+		$query="SELECT * FROM orderpenjualan join pelanggan on orderpenjualan.opnjPlgnId=pelanggan.plgnId where opnjStatusOrder='order'";
+        // $this->M_pos->kueri($query)->result();
+        // print_r($this->db->last_query());
+        // die();
         $data=array(
 			'page'=>'orderpenjualan/dataorder',
 			'link'=>'orderpenjualan',
@@ -125,37 +128,28 @@ class C_orderpenjualan extends CI_Controller {
         $dopjDiskon=$this->input->post('dopjDiskon',true); 
         $createdby=$this->session->userdata('userNama');
         //$createdby=$this->M_pos->usercreated();
-        $sisastok=$this->M_pos->ambil('brngId',$dopjBrngId,'barang')->row()->brngStokAkhir;
-        if($dopjJumlah>$sisastok){
-          $this->session->set_flashdata(
-            'msg', 
-            '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a><strong>Peringatan!</strong> Data gagal ditambah Karena Stok Kurang!</div>'
-           );
-          echo json_encode(array('status'=>'fail'));
-        }
-        else{
-           $data=array(
-            'dopjBrngId'=>$dopjBrngId,
-            'dopjJumlah'=>$dopjJumlah,
-            'dopjHarga'=>$dopjHarga,
-            'dopjDiskon'=>$dopjDiskon,
-            'dopjCreatedBy'=>$createdby,
+        $data=array(
+        'dopjBrngId'=>$dopjBrngId,
+        'dopjJumlah'=>$dopjJumlah,
+        'dopjHarga'=>$dopjHarga,
+        'dopjDiskon'=>$dopjDiskon,
+        'dopjCreatedBy'=>$createdby,
+        );
+        $simpandetailtemp=$this->M_pos->simpan_data($data,'detorderpenjualan_temp');
+        if($simpandetailtemp){
+            $this->session->set_flashdata(
+                'msg', 
+                '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a><strong>Success!</strong> Data berhasil ditambah !</div>'
             );
-            $simpandetailtemp=$this->M_pos->simpan_data($data,'detorderpenjualan_temp');
-            if($simpandetailtemp){
-                $this->session->set_flashdata(
-                    'msg', 
-                    '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a><strong>Success!</strong> Data berhasil ditambah !</div>'
-                );
-                echo json_encode(array('status'=>'success'));
-             }else{
-               $this->session->set_flashdata(
-                    'msg', 
-                    '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a><strong>Peringatan!</strong> Data gagal ditambah !</div>'
-                );
-               echo json_encode(array('status'=>'fail'));
-             }   
-        }
+            echo json_encode(array('status'=>'success'));
+         }else{
+           $this->session->set_flashdata(
+                'msg', 
+                '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a><strong>Peringatan!</strong> Data gagal ditambah !</div>'
+            );
+           echo json_encode(array('status'=>'fail'));
+         } 
+        
    }
 
    public function hapusdetail($dopjId){

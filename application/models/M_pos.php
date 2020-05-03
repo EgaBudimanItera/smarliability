@@ -141,6 +141,26 @@ class M_pos extends CI_Model {
         return $kodejadi;
     }
 
+    function id_beban(){
+        //K002
+        $this->db->select('Right(idbeban,3) as kode',false);
+        
+        $this->db->order_by('idbeban','desc');
+        $this->db->limit(1);
+        $query = $this->db->get('beban');
+
+        if($query->num_rows()<>0){
+            $data = $query->row();
+            $kode = intval($data->kode)+1;
+        }else{
+            $kode = 1;
+
+        }
+        $kodemax = str_pad($kode,3,"0",STR_PAD_LEFT);
+        $kodejadi  = "BI".$kodemax;
+        return $kodejadi;
+    }
+
     function kode_supplier(){
         //K002
         $this->db->select('Right(splrKode,3) as kode',false);

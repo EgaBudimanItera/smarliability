@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class C_barang extends CI_Controller {
+class C_akun extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
@@ -11,10 +11,10 @@ class C_barang extends CI_Controller {
 	}
 
 	public function index(){
-		$query="SELECT * FROM barang join satuan on(brngStunId=stunId)";
+		$query="SELECT * FROM akun";
 		$data=array(
-			'page'=>'barang/databarang',
-			'link'=>'barang',
+			'page'=>'akun/dataakun',
+			'link'=>'akun',
 			'list' => $this->M_pos->kueri($query)->result(),
 		);
 		$this->load->view('partials/back/wrapper',$data);
@@ -22,63 +22,52 @@ class C_barang extends CI_Controller {
 
 	public function formtambah(){
 		$data=array(
-			'page'=>'barang/formtambah',
-			'link'=>'barang',
-			'list_satuan' => $this->M_pos->list_data_all('satuan'),
-			'brngKode'=>$this->M_pos->kode_barang(),
+			'page'=>'akun/formtambah',
+			'link'=>'akun',
 		);
 		$this->load->view('partials/back/wrapper',$data);
 	}
 
-	public function formubah($brngId){
+	public function formubah($noakun){
 		$data=array(
-			'page'=>'barang/formubah',
-			'link'=>'barang',
-			'barang' => $this->M_pos->ambil('brngId',$brngId,'barang')->row(),
-			'list_satuan' => $this->M_pos->list_data_all('satuan'),
+			'page'=>'akun/formubah',
+			'link'=>'akun',
+			'akun' => $this->M_pos->ambil('noakun',$noakun,'akun')->row(),
 		);
 		$this->load->view('partials/back/wrapper',$data);
 	}
 
-	public function tambah_barang(){
+	public function tambah_akun(){
 
-		$brngKode=$this->input->post('brngKode',true);
+		$noakun=$this->input->post('noakun',true);
 		$data = array(
-			'brngKode' => $brngKode,
-			'brngNama' => $this->input->post('brngNama', true),
-			'brngStunId' => $this->input->post('brngStunId', true),
-			
-			'brngHargaJual' => $this->input->post('brngHargaJual', true),
-			
+			'noakun' => $noakun,
+			'namaakun' => $this->input->post('namaakun', true),
 		);
-		$simpan = $this->M_pos->simpan_data($data,'barang');
+		$simpan = $this->M_pos->simpan_data($data,'akun');
 		if($simpan){
             $this->session->set_flashdata(
             'msg', 
             '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a><strong>Success!</strong> Data berhasil disimpan !</div>'
         );
-            redirect(c_barang);
+            redirect(c_akun);
         }else{
             $this->session->set_flashdata(
             'msg', 
             '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a><strong>Peringatan!</strong> Data gagal disimpan !</div>'
         );
-            redirect(c_barang/formtambah);
+            redirect(c_akun/formtambah);
         }
 		
 	}
 
-	public function ubah_barang($brngId){
+	public function ubah_akun($noakun){
 		$data = array(
-		'brngKode' => $this->input->post('brngKode', true),
-		'brngNama' => $this->input->post('brngNama', true),
-		'brngStunId' => $this->input->post('brngStunId', true),
-		
-		'brngHargaJual' => $this->input->post('brngHargaJual', true),
-		
+		'noakun' => $this->input->post('noakun', true),
+		'namaakun' => $this->input->post('namaakun', true),
 		);
 
-		$ubah = $this->M_pos->update('brngId',$brngId,'barang',$data);
+		$ubah = $this->M_pos->update('noakun',$noakun,'akun',$data);
 		// var_dump($ubah);
 		// die();
 
@@ -87,38 +76,38 @@ class C_barang extends CI_Controller {
             'msg', 
             '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a><strong>Success!</strong> Data berhasil diubah !</div>'
         );
-            redirect(c_barang);
+            redirect(c_akun);
         }else{
              $this->session->set_flashdata(
             'msg', 
             '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a><strong>Peringatan!</strong> Data gagal diubah !</div>'
         );
-            redirect(c_barang/formubah/$brngId);
+            redirect(c_akun/formubah/$noakun);
         }
 	}
 
-	public function hapus_barang($brngId){
+	public function hapus_akun($noakun){
 
-		$hapus = $this->M_pos->hapus('brngId',$brngId,'barang');
+		$hapus = $this->M_pos->hapus('noakun',$noakun,'akun');
 
 		if($hapus){
                  $this->session->set_flashdata(
                 'msg', 
                 '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a><strong>Success!</strong> Data berhasil dihapus !</div>'
             );
-                redirect(c_barang);
+                redirect(c_akun);
             }else{
                  $this->session->set_flashdata(
                 'msg', 
                 '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a><strong>Peringatan!</strong> Data gagal dihapus !</div>'
             );
-                redirect(c_barang/databarang);
+                redirect(c_akun/dataakun);
             }
 
 	}
 
-	public function getbarang($brngId){
-		$data=$this->M_pos->ambil('brngId',$brngId,'barang')->row_array();
+	public function getakun($noakun){
+		$data=$this->M_pos->ambil('noakun',$noakun,'akun')->row_array();
         echo json_encode($data);
 	}
 

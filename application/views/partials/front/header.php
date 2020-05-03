@@ -108,8 +108,7 @@
           <?php
             if(empty($hakakses)){
           ?>
-          <li class="dropdown <?php if($link=='loginpelanggan'){echo'active';}?>"> <a href="<?=base_url()?>front/loginpelanggan">Login Pelanggan</a>
-          </li>
+          
           <?php
             }else if(!empty($hakakses)){
           ?>

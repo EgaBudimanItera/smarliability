@@ -66,11 +66,10 @@
                     <div class="controls">
                        <select name="userHakAkses" id="userHakAkses">
                         <option value="">-- Pilih --</option>
-                         <option value="Pelanggan">Pelanggan</option>
-                         <option value="Gudang">Gudang</option>
+                         
                          <option value="Penjualan">Penjualan</option>
                          <option value="Keuangan">Keuangan</option>
-                         <option value="Pembelian">Pembelian</option>
+                         
                          <option value="Pimpinan">Pimpinan</option>
                          
                        </select>
